@@ -40,7 +40,9 @@ export const getproduct = async (req, res) => {
     const search = req.query.search || '';
     const regex = new RegExp(search, 'i');
 
+
     const products =  await Product.aggregate([
+
       {
         $lookup: {
           from: 'categories', // Make sure this matches your actual MongoDB collection name

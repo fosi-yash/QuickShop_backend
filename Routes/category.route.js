@@ -14,6 +14,8 @@ categoryrouter.post('/addcategory',fetchuser, categoryupload.single('images'),ad
 
 // ===================== Get All Category ==================>
 
+
 categoryrouter.get('/category',getcategory)
+
 
 export default categoryrouter

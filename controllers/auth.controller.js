@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv';
 import { validationResult } from 'express-validator'
+
 dotenv.config();
 const JWT = process.env.JWT || 'yashisgoodb$oy';
 
@@ -61,14 +62,18 @@ export const login = async (req, res) => {
         if (!result.isEmpty()) {
             return res.send({ 'errors': result.array() });
         }
+
         const { email, password, role } = req.body;
+
         // find user using email
         let user = await User.findOne({ email });
         if (!user) {
             return res.status(400).send({ success, error: "user has been not found" })
         }
+
         if (role !== user.role) {
             return res.json({ error: `You are not ${role} \n please try as ${user.role}` })
+
         }
         // make hash password and compare password which stro in database
         let passwordcompare = await bcrypt.compare(password, user.password)
@@ -85,6 +90,7 @@ export const login = async (req, res) => {
         success = true
         console.log(authtoken)
 
+
         res.json({ success, authtoken, role: user.role })
     } catch (error) {
         console.error(error.message)
@@ -94,4 +100,5 @@ export const login = async (req, res) => {
 export const findusers = async (req, res) => {
     const users = await User.find({ role: 'user' })
     res.json(users)
+
 }

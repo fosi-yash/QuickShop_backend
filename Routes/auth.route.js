@@ -3,6 +3,7 @@ import { body, query, validationResult } from 'express-validator'
 import { findusers, login, signup } from '../controllers/auth.controller.js';
 import fetchuser from '../middleware/fetchuser.js';
 
+
 const authrouter = express.Router()
 
 //Request :1 => make post request to create user
@@ -14,4 +15,5 @@ authrouter.post('/login', [
 ], login)
 
 authrouter.get('/getusers',fetchuser,findusers)
+
 export default authrouter

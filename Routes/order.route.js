@@ -4,6 +4,7 @@ import fetchuser from '../middleware/fetchuser.js'
 import { addorder, allorder, getallorder, getlastorder, getorderbyid, orderdeletebtid, revanue } from '../controllers/order.controller.js'
 import Order from '../models/Order.js'
 
+
 dotenv.config()
 const orderrouter = express.Router()
 
@@ -23,14 +24,17 @@ orderrouter.get('/lastorder', fetchuser,getlastorder )
 
 orderrouter.get('/userorders', fetchuser,getallorder )
 
+
 // ========================= Display All Orders From All Users ===========================>
 
 orderrouter.get('/allorders', fetchuser,allorder )
 
 
+
 // =========================== display Perticular Order Details==========================>
 
 orderrouter.get('/orderdetails/:id', fetchuser,getorderbyid )
+
 
 // =========================== getting monthly summary =================================>
 
