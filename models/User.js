@@ -14,6 +14,15 @@ const UserSchema = new Schema({
         type: String,
         required: true,
     },
+    birthdate:{
+        type:String
+    },
+    mobilenumber:{
+        type:String
+    },
+    profilephoto:{
+        type:String
+    },
 
     role: {
         type: String,

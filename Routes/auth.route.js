@@ -1,7 +1,8 @@
 import express from 'express';
 import { body, query, validationResult } from 'express-validator'
-import { findusers, login, signup } from '../controllers/auth.controller.js';
+import { finduserbyid, findusers, login, signup, updateuser } from '../controllers/auth.controller.js';
 import fetchuser from '../middleware/fetchuser.js';
+import { profileupload } from '../utils/imageUpload.util.js';
 
 
 const authrouter = express.Router()
@@ -14,6 +15,17 @@ authrouter.post('/login', [
     body('password').notEmpty().withMessage("Enter valid Email or Password")
 ], login)
 
+// Request :3 => make get request to find user 
+
 authrouter.get('/getusers',fetchuser,findusers)
+
+// Request :4 => make put request to update the user profile
+
+authrouter.put('/updateprofile',profileupload.single('image'),fetchuser,updateuser)
+
+// Request :5 => make get request to find perticular user
+
+authrouter.get('/getuser',fetchuser,finduserbyid)
+
 
 export default authrouter

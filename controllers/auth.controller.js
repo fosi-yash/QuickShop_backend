@@ -102,3 +102,54 @@ export const findusers = async (req, res) => {
     res.json(users)
 
 }
+
+export const updateuser = async (req, res) => {
+  try {
+    const _id = req.user.id;
+    const { name, email, password, birthdate, mobilenumber } = req.body;
+
+    const user = await User.findById(_id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Handle image
+    const profilephoto = req.file ? `/profile_images/${req.file.filename}` : user.profilephoto;
+
+    // Handle password update only if provided
+    let hashedPassword = user.password;
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      hashedPassword = await bcrypt.hash(password, salt);
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      _id,
+      {
+        name,
+        email,
+        password: hashedPassword,
+        birthdate,
+        mobilenumber,
+        profilephoto
+      }
+    ).select('-password'); // exclude password from response
+
+    res.json({ message: 'Updated Successfully', user: updatedUser });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+};
+
+
+export const finduserbyid = async (req, res) => {
+    const _id=req.user.id
+    const users = await User.findOne({ _id }).select('-password')
+    if(!users){
+        return res.json({"the user can not find":error})
+    }
+    
+    res.json(users)
+
+}

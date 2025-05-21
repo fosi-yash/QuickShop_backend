@@ -22,6 +22,7 @@ dotenv.config()
         app.use(express.json())
         app.use('/product_images', express.static(path.join(__dirname, 'uploads/product_images')));
         app.use('/category_images', express.static(path.join(__dirname, 'uploads/category_images')));
+        app.use('/profile_images', express.static(path.join(__dirname, 'uploads/profile_images')));
 
         app.use(cors({
             origin: 'http://localhost:5173', // your frontend port

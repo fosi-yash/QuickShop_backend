@@ -28,3 +28,16 @@ import path from 'path'
 
 export const categoryupload = multer({ storage: multerstorage })
       
+
+// ============================= Profile Image Setup ===================================>
+
+  const profileStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/profile_images')
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname)
+  }
+})
+
+export const profileupload = multer({ storage: profileStorage })
