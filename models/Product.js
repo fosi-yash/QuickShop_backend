@@ -29,10 +29,10 @@ const productSchema = new mongoose.Schema({
     required: true,
   },
   images: 
-    {
+    [{
       type:String,
       required:true
-    }
+    }]
   ,
   category: {
     type: mongoose.Schema.Types.ObjectId,

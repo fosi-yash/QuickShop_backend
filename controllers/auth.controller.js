@@ -1,12 +1,19 @@
-import express from 'express'
-import User from '../models/User.js'
+import express from 'express';
+import User from '../models/User.js';
 import bcrypt from "bcrypt";
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { validationResult } from 'express-validator'
+import { validationResult } from 'express-validator';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 const JWT = process.env.JWT || 'yashisgoodb$oy';
+
+const __filename = fileURLToPath(import.meta.url);
+        const __dirname = path.dirname(__filename);
+
 
 //Request :1 ============> make post request to create user
 
@@ -116,7 +123,16 @@ export const updateuser = async (req, res) => {
     // Handle image
     const profilephoto = req.file ? `/profile_images/${req.file.filename}` : user.profilephoto;
 
-    // Handle password update only if provided
+    if (req.file && user.profilephoto) {
+      const oldImagePath = path.join(__dirname, '../uploads', user.profilephoto);
+      fs.unlink(oldImagePath, (err) => {
+        if (err) {
+          console.error('Error deleting old profile photo:', err.message);
+        }
+      });
+    }
+
+    // Handle password update
     let hashedPassword = user.password;
     if (password) {
       const salt = await bcrypt.genSalt(10);
@@ -132,8 +148,9 @@ export const updateuser = async (req, res) => {
         birthdate,
         mobilenumber,
         profilephoto
-      }
-    ).select('-password'); // exclude password from response
+      },
+      { new: true } // return the updated document
+    ).select('-password'); // exclude password
 
     res.json({ message: 'Updated Successfully', user: updatedUser });
   } catch (error) {
@@ -143,13 +160,14 @@ export const updateuser = async (req, res) => {
 };
 
 
+
 export const finduserbyid = async (req, res) => {
-    const _id=req.user.id
+    const _id = req.user.id
     const users = await User.findOne({ _id }).select('-password')
-    if(!users){
-        return res.json({"the user can not find":error})
+    if (!users) {
+        return res.json({ "the user can not find": error })
     }
-    
+
     res.json(users)
 
 }

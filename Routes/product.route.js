@@ -8,7 +8,7 @@ dotenv.config()
 const productrouter = express.Router()
 
 //=========================== ADD PRODUCT ============================>
-productrouter.post('/addproduct', uploads.single('image'), addproduct)
+productrouter.post('/addproduct',uploads.array('images',10), addproduct)
 
 // ========================= GET ALL PRODUCTS ===========================>
 

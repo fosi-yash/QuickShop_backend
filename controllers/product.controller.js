@@ -2,12 +2,17 @@ import mongoose from 'mongoose';
 import Product from '../models/Product.js';
 import Category from '../models/Category.js';
 import slugify from 'slugify';
+import fs from 'fs';
+import path from 'path';
 
 //=========================== ADD PRODUCT ============================>
 
 export const addproduct = async (req, res) => {
   const { productName, description, prize, stock, category } = req.body
-  const images = `/product_images/${req.file.filename}`
+  const images = req.files.map((file) => {
+    console.log(file.filename)
+   return `/product_images/${file.filename}`
+  });
 
   try {
     // Validate category ID
@@ -21,7 +26,7 @@ export const addproduct = async (req, res) => {
       prize,
       stock,
       category: new mongoose.Types.ObjectId(category),
-      images
+      images:images
     });
 
     await product.save()
@@ -73,14 +78,34 @@ export const getproduct = async (req, res) => {
 export const removeproductbyid = async (req, res) => {
   try {
     const id = req.params.id;
-    const removeproduct = await Product.findByIdAndDelete({ _id: id })
-    res.json(removeproduct, "product has been removed")
 
+    // 1. Find product to get image paths
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    // 2. Delete each image from filesystem
+    if (product.images && product.images.length > 0) {
+      product.images.forEach(imgPath => {
+        const fullPath = path.join('uploads', imgPath); // because `imgPath` = "/product_images/filename.jpg"
+        fs.unlink(fullPath, err => {
+          if (err) {
+            console.error("Error deleting image:", fullPath, err.message);
+          }
+        });
+      });
+    }
+
+    // 3. Delete the product from the database
+    await Product.findByIdAndDelete(id);
+
+    res.json({ message: "Product and associated images removed successfully." });
   } catch (error) {
-    res.json({ "error in product remove": error })
+    console.error("Error in product remove:", error);
+    res.status(500).json({ error: "Server error while removing product" });
   }
-
-}
+};
 
 //====================== Find Product By ID =================================>
 
