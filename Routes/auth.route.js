@@ -1,6 +1,6 @@
 import express from 'express';
 import { body, query, validationResult } from 'express-validator'
-import { finduserbyid, findusers, login, signup, updateuser } from '../controllers/auth.controller.js';
+import { finduserbyid, findusers, login, signup, updateblockuser, updateuser } from '../controllers/auth.controller.js';
 import fetchuser from '../middleware/fetchuser.js';
 import { profileupload } from '../utils/imageUpload.util.js';
 
@@ -23,7 +23,12 @@ authrouter.get('/getusers',fetchuser,findusers)
 
 authrouter.put('/updateprofile',profileupload.single('image'),fetchuser,updateuser)
 
-// Request :5 => make get request to find perticular user
+
+// Request :5 => make put request to update the user 
+
+authrouter.put('/updateblockeduser/:id',fetchuser,updateblockuser)
+
+// Request :6 => make get request to find perticular user
 
 authrouter.get('/getuser',fetchuser,finduserbyid)
 

@@ -119,6 +119,7 @@ export const findProduct = async (req, res) => {
     }
 
     res.json(product); // returning product directly
+    console.log(product)
   } catch (error) {
     console.log("The error occurred in findProduct controller:", error);
     res.status(500).json({ message: "Internal server error", error });
@@ -138,21 +139,18 @@ export const updateProduct = async (req, res) => {
       return res.status(404).json({ error: "Product not found" });
     }
 
-    const image = req.file ? `/product_images/${req.file.filename}` : product.images;
-
-    const updatedProduct = await Product.findByIdAndUpdate(
-      _id,
-      {
-        productName,
-        description,
-        prize,
-        stock,
-        category,
-        images: image,
-        slug: slugify(productName, { lower: true })
-      },
-      { new: true } // Return updated document
-    );
+    if (req.file) {
+      product.images.push(`/product_images/${req.file.filename}`);
+    }
+    
+        product.productName=productName,
+        product.description=description,
+        product.prize=prize,
+        product.stock=stock,
+        product.category=category,
+        product.slug= slugify(productName, { lower: true })
+        
+        const updatedProduct=await product.save()
 
     res.status(200).json({ message: "Product updated successfully", product: updatedProduct });
   } catch (error) {

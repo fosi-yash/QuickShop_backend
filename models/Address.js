@@ -35,6 +35,9 @@ const AddressSchema = new Schema({
     landmark:{
         type:String,
 
+    },
+    display_name:{
+        type:String,
     }
 })
 

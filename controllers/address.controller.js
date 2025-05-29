@@ -7,8 +7,8 @@ export const addaddress= async (req, res) => {
     try {
   
       const userid = req.user.id;
-      const { name, number, pincode, locality, address, city, state, landmark } = req.body
-      const saveaddress = new Address({ userid, name, number, pincode, locality, address, city, state, landmark })
+      const { name, number, pincode, locality, address, city, state, landmark, display_name } = req.body
+      const saveaddress = new Address({ userid, name, number, pincode, locality, address, city, state, landmark ,display_name})
       await saveaddress.save()
       res.json(saveaddress)
     } catch (error) {

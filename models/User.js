@@ -33,6 +33,11 @@ const UserSchema = new Schema({
         type: Date,
         default: Date.now
 
+    },
+    block:{
+        type:Boolean,
+        required:true,
+        default:false
     }
 })
 

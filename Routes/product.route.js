@@ -24,5 +24,6 @@ productrouter.get('/findproduct/:id', fetchuser, findProduct)
 
 // ========================== Update The Product =====================>
 
-productrouter.put('/updateproduct/:id',uploads.single('image'),updateProduct)
+productrouter.put('/updateproduct/:id', uploads.single('images'), updateProduct);
+
 export default productrouter
