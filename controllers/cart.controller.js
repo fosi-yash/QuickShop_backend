@@ -30,7 +30,7 @@ export const getcart = async (req, res) => {
 export const deletecartbyid = async (req, res) => {
     const _id = req.params.id;
     const remove = await Cart.findByIdAndDelete({ _id })
-    res.send(remove)
+    res.json(remove)
 }
 
 // ============================ REMOVE ALL PRODUCTS FROM CART==================>
@@ -39,5 +39,5 @@ export const deletecart = async (req, res) => {
     const id = req.user.id
     const remove = await Cart.deleteMany({ userid: id });
 
-    res.send(remove)
+    res.json(remove)
 }

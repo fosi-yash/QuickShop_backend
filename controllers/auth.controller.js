@@ -24,7 +24,7 @@ export const signup = async (req, res) => {
   let success = false
   // is result is not empty then return array of errors
   if (!result.isEmpty()) {
-    return res.send({ 'errors': result.array() });
+    return res.json({ 'errors': result.array() });
   }
   // find user using findOne() method
   let user = await User.findOne({ email: req.body.email })
@@ -68,7 +68,7 @@ export const login = async (req, res) => {
     const result = validationResult(req);
     // is result is not empty then return array of errors
     if (!result.isEmpty()) {
-      return res.send({ 'errors': result.array() });
+      return res.json({ 'errors': result.array() });
     }
 
     const { email, password, role } = req.body;
@@ -188,7 +188,7 @@ export const updateblockuser = async (req, res) => {
   }
 }
 
-
+// ====================== Find User By Id ===================================>
 
 export const finduserbyid = async (req, res) => {
   const _id = req.user.id
@@ -199,4 +199,23 @@ export const finduserbyid = async (req, res) => {
 
   res.json(users)
 
+}
+
+// ===================== Update User Password ===========================>
+
+export const resetPassword = async (req, res) => {
+  
+  const { email,password } = req.body;
+  console.log(password)
+  const users = await User.findOne({ email})
+  if (!users) {
+    return res.json({ error: "the user can not find" })
+  }
+  const salt = await bcrypt.genSalt(10)
+  const secPassword = await bcrypt.hash(password, salt)
+  if (secPassword === users.password) {
+    return res.json({ error: "Enter New Password" })
+  }
+  const UpdatePassword= await User.findByIdAndUpdate(users._id,{password:secPassword})
+  res.json('Password Updated Successfully')
 }

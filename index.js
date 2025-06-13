@@ -11,6 +11,7 @@ import cartrouter from './Routes/cart.route.js'
 import orderrouter from './Routes/order.route.js'
 import addressrouter from './Routes/address.route.js'
 import categoryrouter from './Routes/category.route.js'
+import otprouter from './Routes/otp.route.js'
 
 dotenv.config()
     ; (async () => {
@@ -23,9 +24,10 @@ dotenv.config()
         app.use('/product_images', express.static(path.join(__dirname, 'uploads/product_images')));
         app.use('/category_images', express.static(path.join(__dirname, 'uploads/category_images')));
         app.use('/profile_images', express.static(path.join(__dirname, 'uploads/profile_images')));
+        app.use(express.static('dist'));
 
         app.use(cors({
-            origin: 'http://localhost:5173', // your frontend port
+            origin: '*', // your frontend port
             credentials: true
         }));
         app.use(express.urlencoded({ extended: true }))
@@ -36,13 +38,14 @@ dotenv.config()
             res.send('Hello World from backend')
         })
 
-        app.use('/', authrouter)
-        app.use('/', categoryrouter)
-        app.use('/', productrouter)
-        app.use('/', addressrouter)
-        app.use('/', orderrouter)
-        app.use('/', cartrouter)
-        app.use('/', paypalrouter)
+        app.use('/api', authrouter)
+        app.use('/api', categoryrouter)
+        app.use('/api', productrouter)
+        app.use('/api', addressrouter)
+        app.use('/api', orderrouter)
+        app.use('/api', cartrouter)
+        app.use('/api', paypalrouter)
+        app.use('/api', otprouter)
         app.listen(port, () => {
             console.log(`Server is running at http://localhost:${port}`)
         })

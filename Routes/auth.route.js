@@ -1,6 +1,6 @@
 import express from 'express';
 import { body, query, validationResult } from 'express-validator'
-import { finduserbyid, findusers, login, signup, updateblockuser, updateuser } from '../controllers/auth.controller.js';
+import { finduserbyid, findusers, login, resetPassword, signup, updateblockuser, updateuser } from '../controllers/auth.controller.js';
 import fetchuser from '../middleware/fetchuser.js';
 import { profileupload } from '../utils/imageUpload.util.js';
 
@@ -32,5 +32,7 @@ authrouter.put('/updateblockeduser/:id',fetchuser,updateblockuser)
 
 authrouter.get('/getuser',fetchuser,finduserbyid)
 
-
+// Requesr :7 => Reser Password =======================>
+    
+authrouter.put('/reset-password',resetPassword)
 export default authrouter
